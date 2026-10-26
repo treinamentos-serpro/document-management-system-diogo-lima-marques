@@ -5,7 +5,11 @@ function upload(req, res) {
     return res.status(400).json({ error: 'Envie um arquivo no campo "file".' });
   }
 
-  const document = service.create(req.file);
+  const document = service.create({
+    originalName: req.file.originalname,
+    size: req.file.size,
+    filename: req.file.filename,
+  });
   res.status(201).json(document);
 }
 
