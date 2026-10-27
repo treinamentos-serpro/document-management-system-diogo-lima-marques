@@ -1,92 +1,37 @@
-# Document Management System com GitHub Copilot
+<div align="center">
 
-<img src="https://octodex.github.com/images/Professortocat_v2.png" align="right" height="200px" />
+# 🎉 Congratulations diogolimamarques! 🎉
 
-Hey diogolimamarques!
+<img src="https://octodex.github.com/images/welcometocat.png" height="200px" />
 
-Mona here. I'm done preparing your exercise. Hope you enjoy! 💚
+### 🌟 You've successfully completed the exercise! 🌟
 
-Remember, it's self-paced so feel free to take a break! ☕️
+## 🚀 Share Your Success!
 
-[![](https://img.shields.io/badge/Go%20to%20Exercise-%E2%86%92-1f883d?style=for-the-badge&logo=github&labelColor=197935)](https://github.com/treinamentos-serpro/document-management-system-diogo-lima-marques/issues/1)
+**Show off your new skills and inspire others!**
+
+<a href="https://twitter.com/intent/tweet?text=I%20just%20completed%20the%20%22Document%20Management%20System%20com%20GitHub%20Copilot%22%20GitHub%20Skills%20hands-on%20exercise!%20%F0%9F%8E%89%0A%0Ahttps%3A%2F%2Fgithub.com%2Ftreinamentos-serpro%2Fdocument-management-system-diogo-lima-marques%0A%0A%23GitHubSkills%20%23OpenSource%20%23GitHubLearn" target="_blank" rel="noopener noreferrer">
+  <img src="https://img.shields.io/badge/Share%20on%20X-1da1f2?style=for-the-badge&logo=x&logoColor=white" alt="Share on X" />
+</a>
+<a href="https://bsky.app/intent/compose?text=I%20just%20completed%20the%20%22Document%20Management%20System%20com%20GitHub%20Copilot%22%20GitHub%20Skills%20hands-on%20exercise!%20%F0%9F%8E%89%0A%0Ahttps%3A%2F%2Fgithub.com%2Ftreinamentos-serpro%2Fdocument-management-system-diogo-lima-marques%0A%0A%23GitHubSkills%20%23OpenSource%20%23GitHubLearn" target="_blank" rel="noopener noreferrer">
+  <img src="https://img.shields.io/badge/Share%20on%20Bluesky-0085ff?style=for-the-badge&logo=bluesky&logoColor=white" alt="Share on Bluesky" />
+</a>
+<a href="https://www.linkedin.com/feed/?shareActive=true&text=I%20just%20completed%20the%20%22Document%20Management%20System%20com%20GitHub%20Copilot%22%20GitHub%20Skills%20hands-on%20exercise!%20%F0%9F%8E%89%0A%0Ahttps%3A%2F%2Fgithub.com%2Ftreinamentos-serpro%2Fdocument-management-system-diogo-lima-marques%0A%0A%23GitHubSkills%20%23OpenSource%20%23GitHubLearn" target="_blank" rel="noopener noreferrer">
+  <img src="https://img.shields.io/badge/Share%20on%20LinkedIn-0077b5?style=for-the-badge&logo=linkedin&logoColor=white" alt="Share on LinkedIn" />
+</a>
+
+### 🎯 What's Next?
+
+**Keep the momentum going!**
+
+[![](https://img.shields.io/badge/Return%20to%20Exercise-%E2%86%92-1f883d?style=for-the-badge&logo=github&labelColor=197935)](https://github.com/treinamentos-serpro/document-management-system-diogo-lima-marques/issues/1)
+[![GitHub Skills](https://img.shields.io/badge/Explore%20GitHub%20Skills-000000?style=for-the-badge&logo=github&logoColor=white)](https://learn.github.com/skills)
+
+*There's no better way to learn than building things!* 🚀
+
+</div>
 
 ---
 
-## Backend local
-
-```bash
-cd backend
-npm install
-npm start
-```
-
-O backend escuta em `http://localhost:3000` por padrão. Configuração opcional:
-
-- `PORT`: porta HTTP (padrão `3000`).
-- `UPLOAD_MAX_SIZE_BYTES`: inteiro positivo com o limite por arquivo em bytes
-  (padrão `10485760`, equivalente a 10 MiB).
-- `DMS_DEFAULT_OWNER`: dono dos documentos (padrão `local-user`). O MVP não
-  implementa autenticação nem isolamento entre usuários.
-
-### API
-
-- `GET /health`: retorna `200` com `{ "status": "ok" }`.
-- `POST /upload`: recebe `multipart/form-data` com um único arquivo no campo
-  `file`, de qualquer tipo. Retorna `201` com `id`, `originalName`, `size` em
-  bytes, `uploadedAt` em ISO 8601 e `owner`.
-- `GET /documents`: retorna `200` com um array desses metadados, do mais recente
-  para o mais antigo, sem paginação.
-- `GET /documents/:id/download`: retorna `200` com o conteúdo binário e
-  `Content-Disposition: attachment`, preservando o nome original.
-
-Erros retornam JSON no formato `{ "error": "mensagem" }`: `400` para upload sem
-arquivo, campo incorreto ou multipart inválido, `413` para tamanho excedido,
-`404` para documento ou arquivo inexistente e `500` para falhas internas.
-
-```bash
-curl -F "file=@./documento.pdf" http://localhost:3000/upload
-curl http://localhost:3000/documents
-curl -OJ http://localhost:3000/documents/ID_RETORNADO/download
-```
-
-Arquivos são gravados exclusivamente em `backend/storage` via Multer
-`diskStorage`, com nomes físicos gerados pela aplicação. Os metadados ficam em
-memória: reiniciar o processo esvazia a listagem, mas não apaga os arquivos já
-gravados. O frontend usa o prefixo `/api`, removido pelo proxy do Vite.
-
-Para executar os testes do backend: `cd backend && npm test`.
-
-### Responsabilidades do backend
-
-O fluxo segue `routes -> controllers -> services -> repositories`. O controller
-adapta o arquivo do Multer para a entrada do serviço (`originalName`, `size` e
-`filename`), sem expor o formato da biblioteca às regras de negócio. O serviço
-separa a criação dos metadados da coordenação de sua persistência; o repository
-mantém os registros em memória e resolve os caminhos físicos dos arquivos.
-A listagem preserva os documentos mais recentes primeiro; em datas iguais, o
-último inserido vem primeiro.
-
-## Frontend
-
-Com o backend em execução, inicie o frontend em outro terminal:
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Acesse `http://localhost:5173`. A interface permite enviar um arquivo, listar
-seus metadados e baixá-lo com o nome original. A lista é atualizada após cada
-upload e também pelo botão **Atualizar lista**. Falhas são exibidas na interface,
-com uma nova tentativa disponível.
-
-O cliente em `frontend/src/services/api.js` centraliza as chamadas `fetch` via
-`/api`; o proxy de desenvolvimento do Vite encaminha essas chamadas ao backend
-em `http://localhost:3000`. Em produção, configure o servidor para encaminhar
-`/api` ao backend, removendo esse prefixo.
-
-Para gerar o build: `cd frontend && npm run build`.
-Para testar o cliente de API: `cd frontend && node --test`.
-
 &copy; 2025 GitHub &bull; [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md) &bull; [MIT License](https://gh.io/mit)
+
